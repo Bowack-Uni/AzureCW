@@ -2,13 +2,15 @@ import pandas as pd
 import os
 
 data = []
-directory = r"C:\Users\bowes\Downloads\activity+recognition+system+based+on+multisensor+data+fusion+arem"
+directory = r"C:\Users\bowes\Downloads\ars"
 
 #Itterate through folders
 for directory, folders, files in os.walk(directory):
     for file in files:
         if file.endswith(".csv"):
-            csvdata = (pd.read_csv(os.path.join(directory, file), skiprows=4))
+            path = os.path.join(directory, file)
+            print(path)
+            csvdata = (pd.read_csv(path, skiprows=4))
             csvdata['source_folder'] = os.path.basename(directory)
             csvdata['source_file'] = file
             data.append(csvdata)
