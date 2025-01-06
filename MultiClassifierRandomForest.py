@@ -17,7 +17,7 @@ ws = Workspace.from_config()
 
 #Start experiment
 experiment_name = 'random-forest-classification'
-experiment = Experiment(workspace=ws, name=experiment_test_name)
+experiment = Experiment(workspace=ws, name='experiment_test_name')
 run = experiment.start_logging()
 
 #Load data from Azure
