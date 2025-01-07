@@ -18,25 +18,26 @@ ws = Workspace.from_config()
 #Start experiment
 experiment_name = 'random-forest-classification'
 experiment = Experiment(workspace=ws, name='experiment_test_name')
-run = experiment.start_logging()
+run = experiment.start_logging(snapshot_directory=None)
 
 #Load data from Azure
-dataset = Dataset.get_by_name(ws, name='AzureCW-dataset1')
+dataset = Dataset.get_by_name(ws, name='processed_data', version=1)
 data = dataset.to_pandas_dataframe()
+print(data.head())
 
 # Print a preview of the data
-run.log_table('data_sample', data.head().to_dict(orient='list'))
+run.log_table('data_sample', data.head(5).to_dict(orient='list'))
 
 #Remove '# Columns: time','source_file', 'source_folder' columns
 data_cols = data.columns.tolist()
 data_cols.remove('# Columns: time')
 data_cols.remove('source_file')
 data_cols.remove('source_folder')
-run.log_table('data_sample_cols_removed', data.head().to_dict(orient='list'))
 
 #Create labels and features
 x = data[data_cols]
 y = data['source_folder']
+run.log_table('data_sample_cols_removed', x.head(5).to_dict(orient='list'))
 
 #Encode labels
 le = LabelEncoder()
