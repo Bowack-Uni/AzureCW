@@ -36,14 +36,14 @@ data.columns = ['time', 'avg_rss12', 'var_rss12', 'avg_rss13', 'var_rss13',
 
 #find rows where time has spaces. There is an error in the csv
 #where all the values end up in 'time' for a few instances
-brokenRows = data[~data['time'].astype(str).contains(' ')]
-normalRows = data[data['time'].astype(str).contains(' ')]
+brokenRows = data[data['time'].astype(str).str.contains(' ')]
+normalRows = data[~data['time'].astype(str).str.contains(' ')]
 
 #Fix the broken rows
 fixedRows = []
 for index, row in brokenRows.iterrows():
     #Split the time into the correct values
-    values = row['time'].split()
+    values = str(row['time']).split()
     #Reassignes the values
     fixedRow = {
     'time': float(values[0]),          
@@ -56,10 +56,11 @@ for index, row in brokenRows.iterrows():
             'source_folder': row['source_folder'],  
             'source_file': row['source_file']      
     }
+
     #This may break continutity of data when added back into the 
     #original csv but since my models are not time series this should not matter
     fixedRows.append(fixedRow)
-
+    
 #Combine the normal and fixed rows to recreate the original dataset
 data = pd.concat([normalRows, pd.DataFrame(fixedRows)], ignore_index=True)
 #Send to CSV

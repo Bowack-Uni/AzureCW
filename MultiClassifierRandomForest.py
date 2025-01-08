@@ -4,16 +4,18 @@ from sklearn.preprocessing import LabelEncoder
 from sklearn.model_selection import train_test_split, cross_val_score
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import classification_report
-
-#Load data
-#data = pd.read_csv('processed_data.csv')
-#print(data.head())
-
+from azureml.core.compute import ComputeTarget, AmlCompute
+from azureml.core.runconfig import RunConfiguration
 from azureml.core import Workspace, Dataset, Run
 from azureml.core.experiment import Experiment
 
-#Initialize workspace. Requires config.json in directory
+#Initialize workspace and azure compute.
+#Requires config.json in directory
 ws = Workspace.from_config()
+compute_name = "AzureCW-compute"
+compute_target = ComputeTarget(workspace=ws, name=compute_name)
+run_config = RunConfiguration()
+run_config.target = compute_target
 
 #Start experiment
 experiment_name = 'random-forest-classification'
@@ -21,23 +23,24 @@ experiment = Experiment(workspace=ws, name='experiment_test_name')
 run = experiment.start_logging(snapshot_directory=None)
 
 #Load data from Azure
-dataset = Dataset.get_by_name(ws, name='processed_data', version=1)
+#data = pd.read_csv('processed_data.csv')
+dataset = Dataset.get_by_name(ws, name='processed_data', version=3)
 data = dataset.to_pandas_dataframe()
-print(data.head())
 
-# Print a preview of the data
+#Print data
 run.log_table('data_sample', data.head(5).to_dict(orient='list'))
 
 #Remove '# Columns: time','source_file', 'source_folder' columns
-data_cols = data.columns.tolist()
-data_cols.remove('# Columns: time')
+data_cols = list(data.columns)
+#changed '# Columns: time' to 'time' since csv cols changed
+data_cols.remove('time')
 data_cols.remove('source_file')
 data_cols.remove('source_folder')
 
 #Create labels and features
 x = data[data_cols]
 y = data['source_folder']
-run.log_table('data_sample_cols_removed', x.head(5).to_dict(orient='list'))
+run.log_table('data_sample_cols_removed', x.head(20).to_dict(orient='list'))
 
 #Encode labels
 le = LabelEncoder()
