@@ -13,14 +13,17 @@ compute_target = ComputeTarget(workspace=ws, name="AzureCW-compute")
 
 # Create a RunConfiguration
 run_config = RunConfiguration()
-run_config.target = compute_target  # Assign the compute target
+run_config.target = compute_target
 
 # Define and attach an environment with the required libraries
 env = Environment(name="AzureCW")
 env.python.conda_dependencies.add_pip_package("scikit-learn")
 env.python.conda_dependencies.add_pip_package("pandas")
 env.python.conda_dependencies.add_pip_package("azureml.core")
-run_config.environment = env  # Attach the environment to the run configuration
+#New code needs two more
+env.python.conda_dependencies.add_pip_package("joblib")
+env.python.conda_dependencies.add_pip_package("numpy")
+run_config.environment = env
 
 from azureml.core import ScriptRunConfig, Experiment
 
