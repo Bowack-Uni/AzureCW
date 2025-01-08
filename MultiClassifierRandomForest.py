@@ -72,3 +72,6 @@ for label, metrics in report.items():
 run.complete()
 
 #Future work: Grid search for hyperparameter tuning plus other models like SVM, Neural Networks, etc.
+#Also implement exportation of model for deployment.
+#Also implement unit and performance tests.
+#Once deployed model can be used in presentation.

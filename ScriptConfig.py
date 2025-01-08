@@ -1,3 +1,5 @@
+#Code to run remotely made with assistance form chatGPT. 
+#Only used to run the script on the cloud 
 from azureml.core import Workspace, Experiment, ScriptRunConfig
 from azureml.core.compute import ComputeTarget
 from azureml.core.runconfig import RunConfiguration

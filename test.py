@@ -1,5 +1,4 @@
-#Debugging code made with chatgpt. Only used for debugging purposes
-
+#Debugging code made with chatgpt. Only used for debugging purposes and to upload datasets to the cloud
 from azureml.core import Workspace, Dataset, Datastore
 import os
 
