@@ -4,7 +4,6 @@ from azureml.core import Workspace, Experiment, ScriptRunConfig
 from azureml.core.compute import ComputeTarget
 from azureml.core.runconfig import RunConfiguration
 from azureml.core.environment import Environment
-
 # Connect to your Azure workspace
 ws = Workspace.from_config()
 
@@ -17,15 +16,16 @@ run_config.target = compute_target
 
 # Define and attach an environment with the required libraries
 env = Environment(name="AzureCW")
+#env.python.conda_dependencies.set_pip_requirements("requirements.txt")
 env.python.conda_dependencies.add_pip_package("scikit-learn")
 env.python.conda_dependencies.add_pip_package("pandas")
 env.python.conda_dependencies.add_pip_package("azureml.core")
-#New code needs two more
 env.python.conda_dependencies.add_pip_package("joblib")
 env.python.conda_dependencies.add_pip_package("numpy")
+env.python.conda_dependencies.add_pip_package("azureml-mlflow")
+env.python.conda_dependencies.add_pip_package("joblib")
 run_config.environment = env
 
-from azureml.core import ScriptRunConfig, Experiment
 
 # Point to the minimal directory
 script_run_config = ScriptRunConfig(
